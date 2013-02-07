@@ -1,7 +1,7 @@
 package Text::CSV::Easy_XS;
 use 5.010;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 our $VERSION = '0.01';
 
@@ -21,18 +21,22 @@ __END__
 
 =head1 NAME
 
-Text::CSV_XS::Easy - Easy CSV parsing and building
+Text::CSV::Easy_XS - Easy CSV parsing and building
+
+=head1 VERSION
+
+Version 0.01
 
 =head1 SYNOPSIS
 
-  use Text::CSV_XS::Easy qw(csv_build csv_parse);
+  use Text::CSV::Easy_XS qw(csv_build csv_parse);
 
   my @fields = csv_parse($string);
   my $string = csv_build(@fields);
 
 =head1 DESCRIPTION
 
-Text::CSV_XS::Easy is a simple module for parsing and building simple CSV fields.
+Text::CSV::Easy_XS is a simple module for parsing and building simple CSV fields.
 
 Integers do not need to be quoted, but strings must be quoted:
 

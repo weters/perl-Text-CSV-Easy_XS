@@ -1,5 +1,5 @@
 # Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl Text-CSV_XS-Easy.t'
+# `make test'. After `make install' it should work as `perl Text-CSV-Easy_XS.t'
 
 #########################
 
