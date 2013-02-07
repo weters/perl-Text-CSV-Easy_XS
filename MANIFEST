@@ -1,9 +1,16 @@
+.gitignore
 Changes
-lib/Text/CSV/Easy_XS.pm
+Easy_XS.xs
+MANIFEST
 Makefile.PL
-MANIFEST			This list of files
 README
+ignore.txt
+lib/Text/CSV/Easy_XS.pm
+ppport.h
 t/00-load.t
+t/boilerplate.t
+t/csv_build.t
+t/csv_parse.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
