@@ -58,6 +58,10 @@ Takes a list of fields and will generate a csv string. This subroutine will rais
 
 Parses a CSV string. Returns a list of fields it found. This subroutine will raise an exception if a string could not be properly parsed.
 
+=head1 DISCLAIMER
+
+Note: this module is still in an *alpha* state. This has not been tested with threads. Use at your own risk.
+
 =head1 SEE ALSO
 
 =over 4
