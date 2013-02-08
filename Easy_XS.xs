@@ -20,6 +20,8 @@ typedef struct csvfield CSVFIELD;
 
 MODULE = Text::CSV::Easy_XS		PACKAGE = Text::CSV::Easy_XS
 
+PROTOTYPES: DISABLE
+
 SV *
 csv_build(...)
     CODE:
