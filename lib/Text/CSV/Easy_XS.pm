@@ -3,7 +3,7 @@ use 5.010;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require Exporter;
 
@@ -25,7 +25,7 @@ Text::CSV::Easy_XS - Easy CSV parsing and building
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -67,6 +67,10 @@ Note: this module is still in an *alpha* state. This has not been tested with th
 =over 4
 
 =item L<Text::CSV>
+
+=item L<Text::CSV::Easy>
+
+=item L<Text::CSV::Easy_PP>
 
 =back
 
