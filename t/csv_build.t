@@ -23,8 +23,7 @@ is(
     'complex build'
 );
 
-my @fields = ( undef, '' );
-is( csv_build(@fields), q{,""}, 'undef and empty' );
+is( csv_build( undef, '' ), q{,""}, 'undef and empty' );
 is(
     encode_utf8( csv_build( "utf-8", "check ✓" ) ),
     encode_utf8(q{"utf-8","check ✓"}),
