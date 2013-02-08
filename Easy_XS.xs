@@ -8,7 +8,7 @@
 #define YES 1
 #define NO 0
 
-typedef enum { CSV_NUMERIC, CSV_STRING } CSVTYPE;
+typedef enum { CSV_NULL, CSV_NUMERIC, CSV_STRING } CSVTYPE;
 
 struct csvfield {
     char *string;
@@ -35,29 +35,45 @@ csv_build(...)
         bool isutf8 = NO;
 
         for (i = 0; i < items; i++) {
+            svtype svt = SvTYPE(ST(i));
+
             if (SvROK(ST(i))) croak("not a string");
 
             if (SvUTF8(ST(i))) isutf8 = YES;
 
-            STRLEN length;
-            char *string = SvPV(ST(i), length);
-            if (string == NULL) croak("could not find a string for argument %d", i + 1);
-
-            CSVTYPE csvtype = CSV_NUMERIC;
-            char *ptr;
-            for (ptr = string; *ptr != '\0'; ptr++) {
-                if (!isdigit(*ptr)) {
-                    csvtype = CSV_STRING;
-                }
-
-                if (csvtype == CSV_STRING && *ptr == '"') length++;
+            if (svt == SVt_NULL) {
+                CSVFIELD field = {NULL,CSV_NULL};
+                fields[i] = field;
             }
+            else {
+                STRLEN length;
+                char *string = SvPV(ST(i), length);
+                if (string == NULL) croak("could not find a string for argument %d", i + 1);
 
-            CSVFIELD field = {string,csvtype};
-            fields[i] = field;
+                if (length == 0) {
+                    CSVFIELD field = {NULL,CSV_STRING};
+                    fields[i] = field;
 
-            finallength += length;
-            if (csvtype == CSV_STRING) finallength += 2; // beginning and trailing quote
+                    finallength += 2; // beginning and trailing quote
+                }
+                else {
+                    CSVTYPE csvtype = CSV_NUMERIC;
+                    char *ptr;
+                    for (ptr = string; *ptr != '\0'; ptr++) {
+                        if (!isdigit(*ptr)) {
+                            csvtype = CSV_STRING;
+                        }
+
+                        if (csvtype == CSV_STRING && *ptr == '"') length++;
+                    }
+
+                    CSVFIELD field = {string,csvtype};
+                    fields[i] = field;
+
+                    finallength += length;
+                    if (csvtype == CSV_STRING) finallength += 2; // beginning and trailing quote
+                }
+            }
         }
 
         finallength += (items - 1); // commas
@@ -73,11 +89,13 @@ csv_build(...)
             CSVFIELD field = fields[i];
             if (field.type == CSV_STRING) outstring[oi++] = '"';
 
-            char *ptr;
-            for (ptr = field.string; *ptr != '\0'; ptr++) {
-                outstring[oi++] = *ptr;
-                if (*ptr == '"') {
-                    outstring[oi++] = '"';
+            if (field.string != NULL) {
+                char *ptr;
+                for (ptr = field.string; *ptr != '\0'; ptr++) {
+                    outstring[oi++] = *ptr;
+                    if (*ptr == '"') {
+                        outstring[oi++] = '"';
+                    }
                 }
             }
 
