@@ -48,6 +48,10 @@ If you need to use a literal quote ("), escape it with another quote:
 
     "one","some ""quoted"" string"
 
+There is also a difference between an empty string and an undefined value:
+
+    "",                 ( '', undef )
+
 =head1 SUBROUTINES
 
 =head2 csv_build( List @fields ) : Str
