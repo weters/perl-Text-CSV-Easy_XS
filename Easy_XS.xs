@@ -112,7 +112,7 @@ csv_parse(string)
         char *ptr   = NULL; // tracks character in string
         char *field = NULL; // tracks current field being parsed
 
-        bool isutf8 = SvUTF8(string);
+        bool isutf8 = SvUTF8(string) != 0; // SvUTF8 doesn't typecast consistently to bool across various archs
         bool numeric = NO;           // numbers don't require quotes
         bool requires_unescape = NO; // did we encounter an escaped quote, e.g. some ""quote""
 
