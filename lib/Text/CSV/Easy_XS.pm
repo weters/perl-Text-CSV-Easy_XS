@@ -3,7 +3,7 @@ use 5.010;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 require Exporter;
 
@@ -26,7 +26,7 @@ Text::CSV::Easy_XS - Easy (and fast) CSV parsing and building
 
 =head1 VERSION
 
-Version 0.50
+Version 0.51
 
 =head1 SYNOPSIS
 
@@ -72,6 +72,12 @@ Takes a list of fields and will generate a csv string. This subroutine will rais
 =head2 csv_parse( Str $string ) : List[Str]
 
 Parses a CSV string. Returns a list of fields it found. This subroutine will raise an exception if a string could not be properly parsed.
+
+=head1 TCE_VERSION
+
+Version 2
+
+This module will be used by L<Text::CSV::Easy> over the PurePerl version if the TCE_VERSION numbers match.
 
 =head1 DISCLAIMER
 

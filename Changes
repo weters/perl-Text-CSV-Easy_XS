@@ -1,5 +1,8 @@
 Revision history for Text-CSV-Easy_XS
 
+0.51    2013-02-09
+        Improves documentation.
+
 0.50    2013-02-09
         Supports RFC 4180.
 
