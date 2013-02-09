@@ -85,4 +85,10 @@ subtest 'UTF-8 Support' => sub {
     cmp_deeply( [ csv_parse(qq{"✓"}) ], ["✓"], 'UTF-8 support' );
 };
 
+cmp_deeply(
+    [ csv_parse(q{"ok"",done",1}) ],
+    [ 'ok",done', 1 ],
+    'escaped quote and a comma'
+);
+
 done_testing();
