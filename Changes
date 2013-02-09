@@ -1,11 +1,14 @@
 Revision history for Text-CSV-Easy_XS
 
+0.04    2013-02-08
+        Adds a new unit test.
+
 0.03    2013-02-07
         Fixes UTF-8 issue on linux builds.
-        Handles empty strings and undef values properly
+        Handles empty strings and undef values properly.
 
 0.02    2013-02-06
-        Minor changes
+        Minor changes.
 
 0.01    2013-02-06
         First version, released on an unsuspecting world.
