@@ -37,15 +37,15 @@ Version 0.50
 
 =head1 DESCRIPTION
 
-Text::CSV::Easy_XS is a simple module for parsing and building simple CSV fields.
+Text::CSV::Easy_XS is a simple module for parsing and building CSV lines. This module is written in XS, which is much faster than the PurePerl alternative (L<Text::CSV::Easy_PP>). You can use L<Text::CSV::Easy> directly and it will make the best decision on which module to use.
 
-This module conforms to RFC 4180 for both parsing and building of CSV strings.
+This module conforms to RFC 4180 (L<http://tools.ietf.org/html/rfc4180>) for both parsing and building of CSV strings.
 
 =over 4
 
 =item 1. Use commas to separate fields. Spaces will be considered part of the field.
 
- abc,def, ghi        => ( 'abc', 'def', 'ghi ' )
+ abc,def, ghi        => ( 'abc', 'def', ' ghi' )
 
 =item 2. You may enclose fields in quotes.
 
