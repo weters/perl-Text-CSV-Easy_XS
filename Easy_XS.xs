@@ -192,7 +192,10 @@ csv_parse(string)
                         continue;
                     }
                     // reached the end of the field
-                    else if ( *(ptr + 1) == ',' || *(ptr + 1) == '\0' ) {
+                    else if ( *(ptr + 1) == ','
+                           || *(ptr + 1) == '\0'
+                           || ( *(ptr + 1) == '\n' && *(ptr + 2) == '\0' )
+                    ) {
                         if (!requires_unescape) {
                             // no additional processing required. just create a string.
                             SV *tmp = sv_2mortal( newSVpvn( field, ptr - field ) );
@@ -223,10 +226,13 @@ csv_parse(string)
                             Safefree(tmp);
                         }
 
+                        field = NULL;
+
+                        // allow trailing newline.
+                        if (*(ptr+1) == '\n') break;
+
                         // move the pointer ahead so we don't process the comma
                         if (*(ptr+1) == ',') ptr++;
-
-                        field = NULL;
                     }
                     else {
                         // put the quote back to make it easier to for the user.

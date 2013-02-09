@@ -14,6 +14,7 @@ test_values(
     q{"abc","""def""","ghi"}     => [qw( abc "def" ghi )],
     q{1,2,3}                     => [qw( 1 2 3 )],
     qq{abc,def\n}                => [qw( abc def )],
+    qq{abc,"def"\n}              => [qw( abc def )],
     q{abc , def , ghi}           => [ 'abc ', ' def ', ' ghi' ],
     q{abc,def,"g, ""h"", and i"} => [ 'abc', 'def', 'g, "h", and i' ],
     q{,""} => [ undef, '' ],
@@ -33,12 +34,7 @@ sub test_values {
     my %tests = @_;
     while ( my ( $csv, $expects ) = each %tests ) {
         ( my $csv_clean = $csv ) =~ s/\n/\\n/g;
-        my $tmp =
-          cmp_deeply( [ csv_parse($csv) ], $expects, "$csv_clean parses" );
-        if ( !$tmp ) {
-            use Data::Dumper;
-            warn Dumper [ csv_parse($csv) ];
-        }
+        cmp_deeply( [ csv_parse($csv) ], $expects, "$csv_clean parses" );
     }
 }
 
