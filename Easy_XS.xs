@@ -138,6 +138,8 @@ csv_parse(string)
             if ( field == NULL ) {
                 field = ptr;
 
+                quoted = NO;
+
                 // a quoted string: "one","two","three"
                 if (*ptr == '"') {
                     quoted = YES;
@@ -151,9 +153,15 @@ csv_parse(string)
                     field = NULL;
                     continue;
                 }
+                // an undef at the end with a trailing newline
+                else if (*ptr == '\n' && *(ptr+1) == '\0') {
+                    // undef is added later
+                    field = NULL;
+                    break;
+                }
                 // an unquoted string or number: one,2,3
                 else {
-                    quoted = NO;
+                    // do nothing
                 }
             }
 
@@ -249,7 +257,7 @@ csv_parse(string)
 
         // if we hit the end of the string, the last field will not have been
         // added if it's a non-quoted string.
-        if (!quoted) {
+        if (field != NULL && !quoted) {
             ST(st_pos++) = sv_2mortal( newSVpvn( field, ptr - field ) );
         }
         // if field is not NULL, it means the string never terminated.
