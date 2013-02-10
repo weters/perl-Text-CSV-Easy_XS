@@ -26,31 +26,16 @@ test_values(
     q{,""} => [ undef, '' ],
 );
 
-test_exceptions(
-    q{1,ab"c}      => qr/quote found in middle of the field: ab"c/,
-    q{1, "bad"}    => qr/quote found in middle of the field:  "bad"/,
-    q{1,"}         => qr/unterminated string: 1,"/,
-    qq{abc,de\nfg} => qr/newline found in unquoted string: de\nfg/,
-    q{"ab"cd,2}    => qr/invalid field: "ab"cd,2/,
-);
-
 done_testing();
 
 sub test_values {
-    my %tests = @_;
-    while ( my ( $csv, $expects ) = each %tests ) {
+    my @tests = @_;    # array instead of hash to maintain order
+
+    for ( my $i = 0 ; $i < @tests ; $i += 2 ) {
+        my ( $csv, $expects ) = @tests[ $i, $i + 1 ];
+
         my $csv_clean = _clean($csv);
         cmp_deeply( [ csv_parse($csv) ], $expects, "$csv_clean parses" );
-    }
-}
-
-sub test_exceptions {
-    my %tests = @_;
-
-    while ( my ( $csv, $qr ) = each %tests ) {
-        eval { csv_parse($csv) };
-        my $csv_clean = _clean($csv);
-        like( $@, $qr, "$csv_clean raised exception" );
     }
 }
 
