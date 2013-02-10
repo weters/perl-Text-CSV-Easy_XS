@@ -154,7 +154,10 @@ csv_parse(string)
                     continue;
                 }
                 // an undef at the end with a trailing newline
-                else if (*ptr == '\n' && *(ptr+1) == '\0') {
+                else if (
+                        ( *ptr == '\n' && *(ptr+1) == '\0' )
+                     || ( *ptr == '\r' && *(ptr+1) == '\n' && *(ptr+2) == '\0' )
+                ) {
                     // undef is added later
                     field = NULL;
                     break;
@@ -177,6 +180,11 @@ csv_parse(string)
                     case '\n': {
                         // allow an optional trailing newline
                         if (*(ptr+1) == '\0') {
+                            // handle the case when the provide a CRLF
+                            if (ptr > field && *(ptr-1) == '\r') {
+                                ptr--;
+                            }
+
                             // goto is evil, but in this case, use it to exit
                             // a nested loop. I prefer a switch here, and I don't
                             // want to add additional logic to the for conditional.
@@ -202,7 +210,8 @@ csv_parse(string)
                     // reached the end of the field
                     else if ( *(ptr + 1) == ','
                            || *(ptr + 1) == '\0'
-                           || ( *(ptr + 1) == '\n' && *(ptr + 2) == '\0' )
+                           || ( *(ptr + 1) == '\n' && *(ptr + 2) == '\0' ) // trailing newline
+                           || ( *(ptr + 1) == '\r' && *(ptr + 2) == '\n' && *(ptr + 3) == '\0' ) // trailing CRLF
                     ) {
                         if (!requires_unescape) {
                             // no additional processing required. just create a string.

@@ -55,9 +55,10 @@ This module conforms to RFC 4180 (L<http://tools.ietf.org/html/rfc4180>) for bot
 
  "a,b","a\nb","a""b" => ( 'a,b', "a\nb", 'a"b' )
 
-=item 4. A trailing newline is acceptable.
+=item 4. A trailing newline is acceptable (both LF and CRLF).
 
  abc,def\n           => ( 'abc', 'def' )
+ abc,def\r\n         => ( 'abc', 'def' )
 
 =back
 

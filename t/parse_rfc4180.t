@@ -17,6 +17,10 @@ test_values(
     qq{abc,"def"\n}              => [qw( abc def )],
     qq{abc,""\n}                 => [ 'abc', '' ],
     qq{abc,\n}                   => [ 'abc', undef ],
+    qq{abc,def\r\n}              => [qw( abc def )],
+    qq{abc,"def"\r\n}            => [qw( abc def )],
+    qq{abc,""\r\n}               => [ 'abc', '' ],
+    qq{abc,\r\n}                 => [ 'abc', undef ],
     q{abc , def , ghi}           => [ 'abc ', ' def ', ' ghi' ],
     q{abc,def,"g, ""h"", and i"} => [ 'abc', 'def', 'g, "h", and i' ],
     q{,""} => [ undef, '' ],
@@ -35,7 +39,7 @@ done_testing();
 sub test_values {
     my %tests = @_;
     while ( my ( $csv, $expects ) = each %tests ) {
-        ( my $csv_clean = $csv ) =~ s/\n/\\n/g;
+        my $csv_clean = _clean($csv);
         cmp_deeply( [ csv_parse($csv) ], $expects, "$csv_clean parses" );
     }
 }
@@ -45,7 +49,14 @@ sub test_exceptions {
 
     while ( my ( $csv, $qr ) = each %tests ) {
         eval { csv_parse($csv) };
-        ( my $csv_clean = $csv ) =~ s/\n/\\n/g;
+        my $csv_clean = _clean($csv);
         like( $@, $qr, "$csv_clean raised exception" );
     }
+}
+
+sub _clean {
+    my $str = shift;
+    $str =~ s/\n/\\n/g;
+    $str =~ s/\r/\\r/g;
+    return $str;
 }
