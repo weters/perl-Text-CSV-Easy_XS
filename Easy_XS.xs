@@ -25,15 +25,16 @@ PROTOTYPES: DISABLE
 SV *
 csv_build(...)
     CODE:
-        int size = 0;
-        int i = 0;
-
+        // we will keep track of exactly how long the final string
+        // needs to be.
         int finallength = 0;
+
+        // turn on the UTF8 flag if we detect any UTF8 strings.
+        bool isutf8 = NO;
 
         CSVFIELD fields[items];
 
-        bool isutf8 = NO;
-
+        int i;
         for (i = 0; i < items; i++) {
             svtype svt = SvTYPE(ST(i));
 
@@ -41,6 +42,7 @@ csv_build(...)
 
             if (SvUTF8(ST(i))) isutf8 = YES;
 
+            // SVt_NULL will be treated as an undef.
             if (svt == SVt_NULL) {
                 CSVFIELD field = {NULL,CSV_NULL};
                 fields[i] = field;
@@ -50,6 +52,7 @@ csv_build(...)
                 char *string = SvPV(ST(i), length);
                 if (string == NULL) croak("could not find a string for argument %d", i + 1);
 
+                // if the length is zero, we'll treat it as an empty string.
                 if (length == 0) {
                     CSVFIELD field = {NULL,CSV_STRING};
                     fields[i] = field;
@@ -64,6 +67,8 @@ csv_build(...)
                             csvtype = CSV_STRING;
                         }
 
+                        // if we encounter a double quote, we'll need to escape it, so add
+                        // one to the length to account for it.
                         if (csvtype == CSV_STRING && *ptr == '"') length++;
                     }
 
@@ -80,31 +85,38 @@ csv_build(...)
 
         char *outstring;
         Newx(outstring, finallength + 1, char);
-        int oi = 0;
+
+        char *optr = outstring;
         for (i = 0; i < items; i++) {
+            // record separator
             if (i != 0) {
-                outstring[oi++] = ',';
+                *optr++ = ',';
             }
 
             CSVFIELD field = fields[i];
-            if (field.type == CSV_STRING) outstring[oi++] = '"';
+
+            // we will quote all strings.
+            if (field.type == CSV_STRING) *optr++ = '"';
 
             if (field.string != NULL) {
                 char *ptr;
                 for (ptr = field.string; *ptr != '\0'; ptr++) {
-                    outstring[oi++] = *ptr;
+                    *optr++ = *ptr;
+
+                    // if we encounter a quote, we need to escape it.
                     if (*ptr == '"') {
-                        outstring[oi++] = '"';
+                        *optr++ = '"';
                     }
                 }
             }
 
-            if (field.type == CSV_STRING) outstring[oi++] = '"';
+            // closing quote
+            if (field.type == CSV_STRING) *optr++ = '"';
         }
 
-        outstring[oi] = '\0';
+        *optr = '\0';
 
-        SV *retval = newSVpvn(outstring, oi);
+        SV *retval = newSVpvn(outstring, optr - outstring);
         Safefree(outstring);
 
         if (isutf8) SvUTF8_on(retval);

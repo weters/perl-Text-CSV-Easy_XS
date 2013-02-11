@@ -1,5 +1,8 @@
 Revision history for Text-CSV-Easy_XS
 
+0.52    2013-02-10
+        Code improvements to Easy_XS.xs
+
 0.51    2013-02-09
         Improves documentation.
         Properly handles CRLF.
