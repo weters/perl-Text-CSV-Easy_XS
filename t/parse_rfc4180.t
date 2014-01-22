@@ -12,7 +12,7 @@ test_values(
     q{abc,def,ghi}               => [qw( abc def ghi )],
     q{"abc","def","ghi"}         => [qw( abc def ghi )],
     q{"abc","""def""","ghi"}     => [qw( abc "def" ghi )],
-    q{1,2,3}                     => [qw( 1 2 3 )],
+    q{0,1,2,3}                   => [qw( 0 1 2 3 )],
     qq{abc,def\n}                => [qw( abc def )],
     qq{abc,"def"\n}              => [qw( abc def )],
     qq{abc,""\n}                 => [ 'abc', '' ],
@@ -31,7 +31,7 @@ done_testing();
 sub test_values {
     my @tests = @_;    # array instead of hash to maintain order
 
-    for ( my $i = 0 ; $i < @tests ; $i += 2 ) {
+    for ( my $i = 0; $i < @tests; $i += 2 ) {
         my ( $csv, $expects ) = @tests[ $i, $i + 1 ];
 
         my $csv_clean = _clean($csv);
