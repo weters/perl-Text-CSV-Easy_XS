@@ -3,7 +3,7 @@ use 5.010;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.52';
+our $VERSION = '0.53';
 
 require Exporter;
 
@@ -26,7 +26,7 @@ Text::CSV::Easy_XS - Easy (and fast) CSV parsing and building
 
 =head1 VERSION
 
-Version 0.52
+Version 0.53
 
 =head1 SYNOPSIS
 

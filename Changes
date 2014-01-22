@@ -1,5 +1,8 @@
 Revision history for Text-CSV-Easy_XS
 
+0.53    2014-01-14
+        Adds more unit tests.
+
 0.52    2013-02-10
         Code improvements to Easy_XS.xs
 
